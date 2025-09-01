@@ -1,0 +1,1 @@
+El dia de hoy arrancamos planificando como seria la estructura de la base de datos para la pagina "Tecnology", comenzando con el DER
