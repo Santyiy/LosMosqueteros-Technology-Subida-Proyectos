@@ -1,1 +1,1 @@
-El dia de la fecha 03/09/2025 realizamos el diagrama de flujo Cliente y Administrador, terminamos el diagrama de Gantt y empezamos a hacer la base de datos
+El dia de la fecha 03/09/2025 terminamos de hacer el diagrama de flujo Cliente y Administrador, tambien el diagrama de Gantt
