@@ -1,1 +1,37 @@
-El dia de hoy ya arrancamos con la pagina para subir los proyectos en la pagina
+Bueno ya cuanado este todo los diagrama empezamos a planificar el disñeo de la pagina que seria algo asi unas carpeta con cada cosa que hacemos para que sea mas facil en organizarce:
+
+Login(logiin.css , login.html , register.css , register.html)
+
+Luego de planificar la parte de cuando se va logearse empezamos a buscar algunos diseño en paginas y etcl.habia uno que nos gusto que poner un video de fondo mientras se logeaba estaba bueno el codigo era agregar esto nomas:
+
+  <video autoplay muted loop id="bg-video">
+    <source src="rain.mp4" type="video/mp4">
+  </video>
+
+Bueno empezamos con el codigo algo simple , cuando pida logear que ponga el email y contraseña como normalmente pide y en register pida nombre(usuario) , email , contraseña y repetir contraseña (esto es solo por seguridad).Todo esto esto va estar en una base de datos mas tarde con un php lo conectamos asi cada usuario tiene su propia cuenta:
+
+algo simple para el login y register: 
+<div class="register-box">
+    <form>
+      <h2>Registro Technology</h2>
+      <div class="input-box">
+        <input type="text" required>
+        <label>Nombre</label>
+      </div>
+      <div class="input-box">
+        <input type="email" required>
+        <label>Email</label>
+      </div>
+      <div class="input-box">
+        <input type="password" required>
+        <label>Contraseña</label>
+      </div>
+
+
+Bueno tambien hicimos un apartado para los administradores asi ellos podria ver , borrar o otra herramienta donde ellos podran entra directamente con una cuenta ya hecha en la base de datos:
+
+  <p class="links">
+        ¿Trabajas aqui? <a href="administradores">Inicio administrador</a>
+      </p>
+
+
