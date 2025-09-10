@@ -8,6 +8,11 @@
     <title>Technology</title>
 </head>
 <body>
+    <?php
+    session_start();
+    echo();
+
+    ?>
     <div class="container mb-4">
         <nav class="navbar navbar-expand-sm navbar-light bg-light">
             <a class="navbar-brand" href="Inicio.html">Technology</a>
