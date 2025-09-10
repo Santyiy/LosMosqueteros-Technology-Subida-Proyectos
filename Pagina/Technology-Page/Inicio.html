@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title></title>
+<style>
+  :root{
+    --bg: #6b33ff;
+    --bg2:#8a5bff;
+    --text:#ffffff;
+    --muted:#e6e2ffcc;
+    --shadow: 6px 6px 18px 2px rgba(0,0,0,.35);
+    --cardW: 78vw;
+    --cardH: 56vh;
+    --thumb: 90px;
+    --radius: 18px;
+  }
+
+  *{box-sizing: border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Arial, sans-serif;
+    color: var(--text);
+    background: radial-gradient(1200px 700px at 10% -10%, var(--bg2), var(--bg)) fixed;
+    overflow-x:hidden;
+  }
+
+  /* Header */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:18px 22px 8px;
+  }
+  .brand{font-weight:800; letter-spacing:.5px; font-size: clamp(18px,3.6vw,28px)}
+  .actions{display:flex; gap:10px}
+  .btn{
+    appearance:none; border:0; border-radius:14px; padding:10px 14px;
+    background:#fff; color:#2c2c2c; font-weight:600; cursor:pointer;
+    box-shadow: var(--shadow);
+  }
+  .btn.secondary{background:#ffffff20; color:#fff; border:1px solid #ffffff44; backdrop-filter: blur(6px)}
+  .btn:active{transform: translateY(1px)}
+
+  /* CAROUSEL WRAPPER */
+  .carousel{
+    position:relative; width:100%;
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+
+  /* MAIN CARD AREA */
+  .stage{
+    position:relative; width: min(100vw, 1100px);
+    height: var(--cardH);
+    margin-inline:auto; border-radius: var(--radius);
+    overflow: clip;
+    box-shadow: var(--shadow);
+  }
+  .slide{
+    position:absolute; inset:0; display:grid; grid-template-columns: 1.2fr .8fr;
+    background:#000; opacity:0; transform: scale(.98); transition: .45s ease;
+    border-radius: var(--radius); overflow:hidden;
+  }
+  .slide.active{opacity:1; transform: none; z-index:2}
+  .image{
+    position:relative; overflow:hidden;
+  }
+  .image>img{
+    width:100%; height:100%; object-fit: cover; display:block; filter: contrast(1.03) saturate(1.05);
+  }
+  .details{
+    position:relative; background: linear-gradient(120deg,#0b0b15cc,#1b1444cc);
+    padding:22px 22px 18px 22px; display:flex; flex-direction:column; gap:14px;
+    backdrop-filter: blur(6px);
+  }
+  .place{
+    display:inline-flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px;
+    background:#ffffff12; padding:8px 12px; border-radius: 999px; width:max-content;
+  }
+  .title{
+    font-weight:800; line-height:1.05; font-size: clamp(26px, 4.6vw, 54px);
+    text-shadow: 0 8px 24px rgba(0,0,0,.45);
+  }
+  .desc{color:var(--muted); line-height:1.35; max-height: 35vh; overflow:auto}
+
+  .comment-box{
+    margin-top:auto; display:flex; flex-direction:column; gap:8px;
+    background:#ffffff10; padding:10px; border-radius:12px;
+    border:1px solid #ffffff22;
+  }
+  .comment-box h4{margin:0; font-size:14px; opacity:.9}
+  .comment-list{
+    max-height: 18vh; overflow:auto; display:flex; flex-direction:column; gap:8px;
+    padding-right:4px;
+  }
+  .comment{
+    background:#00000035; border:1px solid #ffffff22; padding:8px 10px; border-radius:10px; font-size:14px
+  }
+  .comment-form{display:flex; gap:8px}
+  .comment-form input{
+    flex:1; border:1px solid #ffffff33; border-radius:10px; padding:10px 12px; background:#ffffff18; color:#fff;
+    outline:none;
+  }
+  .comment-form .btn{padding:10px 12px}
+
+  /* THUMB STRIP */
+  .strip{
+    position:relative;
+    width: min(100vw, 1100px);
+    margin: 2px auto 0;
+    padding: 8px 64px;
+  }
+  .thumbs{
+    display:flex; gap:12px; overflow:auto; scroll-snap-type: x mandatory; padding-bottom:6px;
+  }
+  .thumb{
+    position:relative; width: clamp(86px, 10vw, 140px); height: clamp(64px, 8vw, 90px);
+    border-radius: 12px; overflow:hidden; flex:0 0 auto; scroll-snap-align: start;
+    cursor:pointer; box-shadow: var(--shadow); border:2px solid transparent;
+    transition: .25s ease;
+  }
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+  .thumb.active{transform: translateY(-2px); border-color:#fff}
+
+  /* NAV ARROWS */
+  .nav{
+    position:absolute; inset-block:0; width: min(100vw, 1100px); margin-inline:auto; pointer-events:none;
+  }
+  .arrow{
+    position:absolute; top: calc(50% - 20px);
+    width:44px; height:44px; border-radius:999px; border:1px solid #ffffff66;
+    background:#00000035; color:#fff; display:grid; place-content:center;
+    font-weight:800; cursor:pointer; pointer-events:auto; user-select:none;
+    backdrop-filter: blur(6px);
+  }
+  .arrow:hover{background:#00000055}
+  .arrow.prev{left: calc(50% - var(--cardW)/2 + 10px)}
+  .arrow.next{right: calc(50% - var(--cardW)/2 + 10px)}
+
+  /* ADD PROJECT MODAL */
+  .modal-backdrop{
+    position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.45); z-index:50;
+  }
+  .modal{
+    width:min(92vw, 680px); background:#0f0f1ad9; color:#fff; border:1px solid #ffffff26;
+    border-radius:18px; padding:18px; box-shadow: var(--shadow); backdrop-filter: blur(8px);
+  }
+  .modal h3{margin:6px 6px 14px}
+  .grid{display:grid; grid-template-columns: 1fr 1fr; gap:12px}
+  .field{display:flex; flex-direction:column; gap:6px}
+  .field label{font-size:13px; opacity:.9}
+  .field input,.field textarea{
+    border:1px solid #ffffff33; border-radius:10px; padding:10px 12px; background:#ffffff12; color:#fff; outline:none;
+  }
+  .field textarea{min-height:110px; resize:vertical}
+  .modal .row{display:flex; gap:10px; justify-content:flex-end; margin-top:12px}
+
+  /* Responsive */
+  @media (max-width: 900px){
+    :root{ --cardH: 64vh }
+    .slide{grid-template-columns:1fr}
+    .image{height: 42%}
+  }
+</style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="brand">CSS CAROUSEL</div>
+    <div class="actions">
+      <button class="btn secondary" id="prevBtn">◀</button>
+      <button class="btn secondary" id="nextBtn">▶</button>
+      <button class="btn" id="addProjectBtn">Agregar proyecto</button>
+    </div>
+  </header>
+
+  <main class="carousel">
+    <section class="stage" id="stage"></section>
+
+    <div class="nav">
+      <div class="arrow prev" id="prev">‹</div>
+      <div class="arrow next" id="next">›</div>
+    </div>
+
+    <section class="strip">
+      <div class="thumbs" id="thumbs"></div>
+    </section>
+  </main>
+
+  <!-- MODAL NUEVO PROYECTO -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <form class="modal" id="projectForm">
+      <h3>Agregar proyecto</h3>
+      <div class="grid">
+        <div class="field">
+          <label for="title">Título</label>
+          <input id="title" required placeholder="Ej: Göreme Valley" />
+        </div>
+        <div class="field">
+          <label for="place">Lugar / categoría</label>
+          <input id="place" placeholder="Capadocia, Turquía" />
+        </div>
+        <div class="field" style="grid-column:1 / -1">
+          <label for="image">URL de imagen</label>
+          <input id="image" required placeholder="https://..." />
+        </div>
+        <div class="field" style="grid-column:1 / -1">
+          <label for="desc">Descripción</label>
+          <textarea id="desc" placeholder="Breve descripción del proyecto"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <button type="button" class="btn secondary" id="cancelModal">Cancelar</button>
+        <button type="submit" class="btn">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+<script>
+(() => {
+  /* ---------- PERSISTENCIA ---------- */
+  const LS_KEY = "carousel_projects_v1";
+
+  /** @type {{id:string,title:string,place?:string,image:string,desc?:string}[]} */
+  const defaultProjects = [
+    {
+      id: crypto.randomUUID(),
+      title: "Göreme Valley",
+      place: "Capadocia",
+      image: "https://images.unsplash.com/photo-1549640376-195a0f2f0a08?q=80&w=1600&auto=format&fit=crop",
+      desc: "Globos aerostáticos al amanecer. Proyecto de fotografía de viajes."
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Matterhorn",
+      place: "Suiza",
+      image: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600&auto=format&fit=crop",
+      desc: "hola."
+    },
+    {
+      id: crypto.randomUUID(),
+      title: "Kyoto Temples",
+      place: "Japón",
+      image: "https://images.unsplash.com/photo-1549692520-acc6669e2f0c?q=80&w=1600&auto=format&fit=crop",
+      desc: "Exploración  de templos y jardines."
+    }
+  ];
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return { projects: defaultProjects, comments: {} };
+      const parsed = JSON.parse(raw);
+      return { projects: parsed.projects || [], comments: parsed.comments || {} };
+    } catch { return { projects: defaultProjects, comments: {} }; }
+  }
+  function saveState() {
+    localStorage.setItem(LS_KEY, JSON.stringify({ projects, comments }));
+  }
+
+  let { projects, comments } = loadState();
+  let current = 0;
+
+  /* ---------- RENDER ---------- */
+  const stage = document.getElementById("stage");
+  const thumbs = document.getElementById("thumbs");
+
+  function slideTpl(p, active) {
+    return `
+      <article class="slide ${active ? "active" : ""}" data-id="${p.id}">
+        <div class="image"><img src="${p.image}" alt="${p.title}" /></div>
+        <div class="details">
+          <div class="place">${p.place ? p.place : "Proyecto"}</div>
+          <div class="title">${p.title}</div>
+          <div class="desc">${p.desc ? p.desc : ""}</div>
+
+          <div class="comment-box">
+            <h4>Comentarios</h4>
+            <div class="comment-list" id="cl-${p.id}">
+              ${renderComments(p.id)}
+            </div>
+            <form class="comment-form" data-id="${p.id}">
+              <input type="text" name="msg" placeholder="Escribe un comentario..." required />
+              <button class="btn" type="submit">Comentar</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    `;
+  }
+
+  function thumbTpl(p, active){
+    return `
+      <button class="thumb ${active ? "active":""}" data-go="${projects.indexOf(p)}" title="${p.title}">
+        <img src="${p.image}" alt="${p.title}" />
+      </button>
+    `;
+  }
+
+  function render() {
+    stage.innerHTML = projects.map((p, i) => slideTpl(p, i === current)).join("");
+    thumbs.innerHTML = projects.map((p, i) => thumbTpl(p, i === current)).join("");
+  }
+
+  function renderComments(id){
+    const list = comments[id] || [];
+    if(list.length === 0) return `<div class="comment">Sé el primero en comentar 👋</div>`;
+    return list.map(c => `<div class="comment">${escapeHTML(c)}</div>`).join("");
+  }
+
+  function setActive(index){
+    if(index < 0) index = projects.length - 1;
+    if(index >= projects.length) index = 0;
+    current = index;
+    document.querySelectorAll(".slide").forEach((el,i)=>{
+      el.classList.toggle("active", i === current);
+    });
+    document.querySelectorAll(".thumb").forEach((el,i)=>{
+      el.classList.toggle("active", i === current);
+    });
+  }
+
+  /* ---------- HELPERS ---------- */
+  function escapeHTML(str){
+    return str.replace(/[&<>"']/g, s => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+    }[s]));
+  }
+
+  /* ---------- INIT ---------- */
+  render();
+
+  /* ---------- NAV ---------- */
+  function next(){ setActive(current+1) }
+  function prev(){ setActive(current-1) }
+
+  document.getElementById("next").addEventListener("click", next);
+  document.getElementById("prev").addEventListener("click", prev);
+  document.getElementById("nextBtn").addEventListener("click", next);
+  document.getElementById("prevBtn").addEventListener("click", prev);
+
+  thumbs.addEventListener("click", (e) => {
+    const btn = e.target.closest(".thumb");
+    if(!btn) return;
+    setActive(parseInt(btn.dataset.go,10));
+  });
+
+  /* ---------- COMMENTS ---------- */
+  stage.addEventListener("submit", (e)=>{
+    const form = e.target.closest(".comment-form");
+    if(!form) return;
+    e.preventDefault();
+    const id = form.dataset.id;
+    const input = form.querySelector("input[name='msg']");
+    const text = input.value.trim();
+    if(!text) return;
+    comments[id] = comments[id] || [];
+    comments[id].push(text);
+    saveState();
+    const list = document.getElementById(`cl-${id}`);
+    list.insertAdjacentHTML("beforeend", `<div class="comment">${escapeHTML(text)}</div>`);
+    input.value = "";
+  });
+
+  /* ---------- ADD PROJECT MODAL ---------- */
+  const modal = document.getElementById("modalBackdrop");
+  const projectForm = document.getElementById("projectForm");
+  const openModal = () => { modal.style.display = "grid"; setTimeout(()=>modal.style.opacity=1,0) }
+  const closeModal = () => { modal.style.opacity=0; setTimeout(()=>modal.style.display="none",200) }
+
+  document.getElementById("addProjectBtn").addEventListener("click", openModal);
+  document.getElementById("cancelModal").addEventListener("click", closeModal);
+  modal.addEventListener("click",(e)=>{ if(e.target === modal) closeModal() });
+
+  projectForm.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    const title = document.getElementById("title").value.trim();
+    const place = document.getElementById("place").value.trim();
+    const image = document.getElementById("image").value.trim();
+    const desc  = document.getElementById("desc").value.trim();
+
+    if(!title || !image) return;
+
+    const p = { id: crypto.randomUUID(), title, place, image, desc };
+    projects.push(p);
+    saveState();
+
+    // Re-render preservando índice actual (al final va el nuevo)
+    const was = current;
+    render();
+    setActive(projects.length - 1); // saltamos al nuevo
+    closeModal();
+
+    // limpiar form
+    projectForm.reset();
+  });
+
+})();
+</script>
+</body>
+</html>
