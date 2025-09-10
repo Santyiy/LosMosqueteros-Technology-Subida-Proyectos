@@ -2,20 +2,34 @@
 include('DataBase.php')
 
 $id_usuario = $_POST["id_usuario"];
+$id_proyecto = $_POST["id_proyecto"];
 $titulo = $_POST["titulo"];
 $descripcion = $_POST["descripcion"];
-$img = $_POST["imagen"];
+$img = $_POST["imagenes"];
 
 $img = '';
-if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
-    $tmp = $_FILES["imagen"]["tmp_name"];
-    $nombreArchivo = basename($_FILES["imagen"]["name"]);
+if (isset($_FILES["imagenes"]) && $_FILES["imagenes"]["error"] == 0) {
+    $tmp = $_FILES["imagenes"]["tmp_name"];
+    $nombreArchivo = basename($_FILES["imagenes"]["name"]);
     $nombreUnico = uniqid() . "_" . $nombreArchivo;
     move_uploaded_file($tmp, 'images/' . $nombreUnico);
     $img = $nombreUnico;
 }
 
 $query = "INSERT INTO proyectos(id_usuario, titulo, descripcion)VALUES('".$id_usuario."','".$titulo."','".$descripcion."');"
+or die ("Error".mysqli_error($link));
+$result = $link->query($query);
+
+if($result==1){
+    echo("<h3>Datos Cargados</h3>");
+    header("location: http://localhost/Technology-Page/Inicio.php");
+
+}else{
+
+echo("<h3>No se cargaron los datos</h3>");
+}
+
+$query = "INSERT INTO img_proyectos(id_proyecto, imagenes)VALUES('".$img."');"
 or die ("Error".mysqli_error($link));
 $result = $link->query($query);
 
@@ -73,9 +87,13 @@ echo("<h3>No se cargaron los datos</h3>");
               </div>  
               <div>
             <label for="descripcion">Descripcion</label>
-                <input type="color" name="" id="">
+                <input type="text" name="descripcion" id="descripcion">
             </div>
-            <input type="button" value="Guardar">
+            <div>
+            <label for="imagenes">Imagenes</label>
+                <input type="file" name="imagenes" id="imagenes">
+            </div>
+            <input type="button mb-4" value="Guardar">
 
 
         </form>
