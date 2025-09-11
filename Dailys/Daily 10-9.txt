@@ -1,1 +1,1 @@
-El dia de hoy continuamos avanzando con el HTML, CSS Y PHP, ademas de hacer el diagrama DFD
+El dia de hoy continuamos avanzando con el HTML, CSS Y PHP, hoy terminamos el diagrama de flujo de datos(DFD), ya terminamos todos los diagramas y solo faltaria terminar parte del codigo de html y el style del css.
