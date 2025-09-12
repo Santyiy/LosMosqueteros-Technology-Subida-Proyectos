@@ -1,0 +1,4 @@
+El día de hoy se finalizó la página para subir proyectos.
+En cada proyecto ahora es posible adjuntar más de una imagen. Para lograrlo, se creó una nueva tabla llamada img_proyectos, la cual almacena las imágenes de forma independiente.
+Esta tabla está relacionada con la de proyectos mediante el campo id_proyecto, lo que permite asociar múltiples imágenes a un mismo proyecto.
+Además, se configuró la relación de manera que, al eliminar un proyecto, automáticamente se eliminen todas las imágenes vinculadas a ese proyecto, evitando datos huérfanos en la base.
