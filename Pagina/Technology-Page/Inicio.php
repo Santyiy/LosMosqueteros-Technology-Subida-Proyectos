@@ -10,7 +10,6 @@
 <body>
     <?php
     session_start();
-    echo();
 
     ?>
     <div class="container mb-4">
@@ -26,7 +25,7 @@
                         <a class="nav-link" href="Proyectos.php">Proyectos</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="Subirproyectos.php">Subir Proyectos</a>
+                        <a class="nav-link" href="Config/SubirProyectos.php">Subir Proyectos</a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="Chat.php">Chat General</a>

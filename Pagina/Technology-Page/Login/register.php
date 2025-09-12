@@ -1,47 +1,45 @@
 <?php
-// Datos de conexión
+include ("../Config/DataBase.php");
+
 $servidor = "localhost";
-$usuario = "root";   // cambia si tu MySQL tiene otro usuario
-$clave = "";         // pon tu contraseña si tiene
-$bd = "tc";          // tu base de datos
+$usuario = "root";   
+$clave = "";         
+$bd = "technologydb";          
 
-$conn = mysqli_connect($servidor, $usuario, $clave, $bd);
+$link = mysqli_connect($servidor, $usuario, $clave, $bd);
 
-// Verificar conexión
-if (!$conn) {
+if (!$link) {
     die("❌ Error de conexión: " . mysqli_connect_error());
 }
 
-// Recibir datos del formulario
-$user = $_POST['usuario'];
+$user = $_POST['usuario'];  
 $email = $_POST['email'];
 $pass = $_POST['password'];
 $confirm = $_POST['confirm_password'];
 
-// Validar contraseñas
 if ($pass !== $confirm) {
     echo "<script>alert('❌ Las contraseñas no coinciden'); window.location.href='register.html';</script>";
     exit();
 }
 
-// Verificar si ya existe usuario o email
-$check = "SELECT * FROM usuarios WHERE usuario='$user' OR email='$email'";
-$result = mysqli_query($conn, $check);
+
+$check = "SELECT * FROM usuarios WHERE nombre='$user' OR email='$email'";
+$result = mysqli_query($link, $check);
 
 if (mysqli_num_rows($result) > 0) {
     echo "<script>alert('⚠️ Ese usuario o correo ya está registrado'); window.location.href='register.html';</script>";
     exit();
 }
 
-// Insertar usuario nuevo
-$query = "INSERT INTO usuarios (usuario, email, password, rol) 
-          VALUES ('$user', '$email', '$pass', 'usuario')";
 
-if (mysqli_query($conn, $query)) {
+$query = "INSERT INTO usuarios (nombre, email, PASSWORD, rol) 
+          VALUES ('$user', '$email', '$pass', 'Empleado')";
+
+if (mysqli_query($link, $query)) {
     echo "<script>alert('✅ Registro exitoso, ahora inicia sesión'); window.location.href='login.html';</script>";
 } else {
-    echo "❌ Error al registrar: " . mysqli_error($conn);
+    echo "❌ Error al registrar: " . mysqli_error($link);
 }
 
-mysqli_close($conn);
+mysqli_close($link);
 ?>
