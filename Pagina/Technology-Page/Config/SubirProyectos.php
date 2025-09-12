@@ -5,12 +5,12 @@ $id_usuario = $_POST["id_usuario"];
 $id_proyecto = $_POST["id_proyecto"];
 $titulo = $_POST["titulo"];
 $descripcion = $_POST["descripcion"];
-$img = $_POST["imagenes"];
+$img = $_POST["imagen"];
 
 $img = '';
-if (isset($_FILES["imagenes"]) && $_FILES["imagenes"]["error"] == 0) {
-    $tmp = $_FILES["imagenes"]["tmp_name"];
-    $nombreArchivo = basename($_FILES["imagenes"]["name"]);
+if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
+    $tmp = $_FILES["imagen"]["tmp_name"];
+    $nombreArchivo = basename($_FILES["imagen"]["name"]);
     $nombreUnico = uniqid() . "_" . $nombreArchivo;
     move_uploaded_file($tmp, 'images/' . $nombreUnico);
     $img = $nombreUnico;
@@ -29,7 +29,7 @@ if($result==1){
 echo("<h3>No se cargaron los datos</h3>");
 }
 
-$query = "INSERT INTO img_proyectos(id_proyecto, imagenes)VALUES('".$img."');"
+$query = "INSERT INTO img_proyectos(id_proyecto, imagen)VALUES('".$img."');"
 or die ("Error".mysqli_error($link));
 $result = $link->query($query);
 
@@ -90,8 +90,8 @@ echo("<h3>No se cargaron los datos</h3>");
                 <input type="text" name="descripcion" id="descripcion">
             </div>
             <div>
-            <label for="imagenes">Imagenes</label>
-                <input type="file" name="imagenes" id="imagenes">
+            <label for="imagen">Imagenes</label>
+                <input type="file" name="imagen" id="imagen">
             </div>
             <input type="button mb-4" value="Guardar">
 
