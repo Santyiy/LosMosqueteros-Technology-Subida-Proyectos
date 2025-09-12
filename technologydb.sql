@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 07, 2025 at 06:10 AM
+-- Generation Time: Sep 12, 2025 at 04:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -65,6 +65,18 @@ CREATE TABLE `comentarios` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `img_proyectos`
+--
+
+CREATE TABLE `img_proyectos` (
+  `id` int(11) NOT NULL,
+  `id_proyecto` int(11) NOT NULL,
+  `imagen` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `proyectos`
 --
 
@@ -118,6 +130,13 @@ ALTER TABLE `comentarios`
   ADD KEY `id_proyecto` (`id_proyecto`);
 
 --
+-- Indexes for table `img_proyectos`
+--
+ALTER TABLE `img_proyectos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_proyecto` (`id_proyecto`);
+
+--
 -- Indexes for table `proyectos`
 --
 ALTER TABLE `proyectos`
@@ -151,6 +170,12 @@ ALTER TABLE `chat_general`
 -- AUTO_INCREMENT for table `comentarios`
 --
 ALTER TABLE `comentarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `img_proyectos`
+--
+ALTER TABLE `img_proyectos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -188,6 +213,12 @@ ALTER TABLE `chat_general`
 ALTER TABLE `comentarios`
   ADD CONSTRAINT `comentarios_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
   ADD CONSTRAINT `comentarios_ibfk_2` FOREIGN KEY (`id_proyecto`) REFERENCES `proyectos` (`id`);
+
+--
+-- Constraints for table `img_proyectos`
+--
+ALTER TABLE `img_proyectos`
+  ADD CONSTRAINT `img_proyectos_ibfk_1` FOREIGN KEY (`id_proyecto`) REFERENCES `proyectos` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `proyectos`
