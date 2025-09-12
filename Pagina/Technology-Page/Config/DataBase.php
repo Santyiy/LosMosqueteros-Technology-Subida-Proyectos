@@ -1,16 +1,16 @@
 <?php
 
 $host = "localhost";
-$user = "rust";
+$user = "root";
 $pw = "";
 $db = "technologydb";
 
-$link = new mysqli("$host","$user","$pw","$db");
-if ($link->connection_error){
-    die("Error en la conexion ". $link->connection_error)
-}
-else{
-    echo("Conexion correcta");
+$link = new mysqli($host, $user, $pw, $db);
+
+if ($link->connect_error) {
+    die("Error en la conexion: " . $link->connect_error); 
+} else {
+    echo "Conexion correcta";
 }
 
 ?>
